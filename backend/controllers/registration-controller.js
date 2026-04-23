@@ -1,5 +1,6 @@
 import Event from '../model/Events.js';
 import Registration from '../model/Registrations.js';
+import { sendRegistrationStatusUpdateEmail } from '../lib/email-service.js';
 
 function countCapacityConsumingStatuses(eventRegistrationMode) {
     if (eventRegistrationMode === 'shortlisted') {
@@ -9,8 +10,64 @@ function countCapacityConsumingStatuses(eventRegistrationMode) {
     return ['registered', 'approved'];
 }
 
+async function registerForResolvedEvent(event, attendeeName, attendeeEmail, phone, res) {
+    if (event.status === 'cancelled') {
+        return res.status(400).json({ message: 'Registrations are closed for this event.' });
+    }
+
+    if (event.status !== 'published') {
+        return res.status(400).json({ message: 'Registrations are only open for published events.' });
+    }
+
+    const normalizedEmail = attendeeEmail.trim().toLowerCase();
+
+    const existingRegistration = await Registration.findOne({
+        eventId: event._id,
+        attendeeEmail: normalizedEmail
+    });
+
+    if (existingRegistration) {
+        return res.status(409).json({ message: 'This attendee is already registered for the event.' });
+    }
+
+    const activeRegistrationCount = await Registration.countDocuments({
+        eventId: event._id,
+        status: { $in: countCapacityConsumingStatuses(event.registrationMode) }
+    });
+
+    if (activeRegistrationCount >= event.capacity) {
+        return res.status(400).json({ message: 'Event capacity is full.' });
+    }
+
+    const registration = await Registration.create({
+        eventId: event._id,
+        attendeeName: attendeeName.trim(),
+        attendeeEmail: normalizedEmail,
+        phone: phone?.trim() || null,
+        status: event.registrationMode === 'open' ? 'registered' : 'pending'
+    });
+
+    await sendRegistrationStatusUpdateEmail({
+        attendeeEmail: normalizedEmail,
+        attendeeName: registration.attendeeName,
+        eventTitle: event.title,
+        eventDate: event.date,
+        venue: event.venue,
+        nextStatus: registration.status
+    });
+
+    return res.status(201).json({
+        message: event.registrationMode === 'open'
+            ? "You're confirmed!"
+            : 'We received your registration, pending review.',
+        registration
+    });
+}
+
 async function fetchOwnedEvent(eventId, organizerId) {
-    const event = await Event.findById(eventId).select('organizerId registrationMode capacity');
+    const event = await Event.findById(eventId).select(
+        'organizerId registrationMode capacity title date venue'
+    );
     if (!event) {
         return { error: { code: 404, message: 'Event not found.' } };
     }
@@ -56,6 +113,15 @@ async function updateRegistrationStatus(req, res, allowedCurrentStatus, nextStat
     registration.status = nextStatus;
     await registration.save();
 
+    await sendRegistrationStatusUpdateEmail({
+        attendeeEmail: registration.attendeeEmail,
+        attendeeName: registration.attendeeName,
+        eventTitle: ownedEventResult.event.title,
+        eventDate: ownedEventResult.event.date,
+        venue: ownedEventResult.event.venue,
+        nextStatus
+    });
+
     return res.status(200).json({
         message: successMessage,
         registration
@@ -71,53 +137,36 @@ export async function registerForEvent(req, res) {
             return res.status(400).json({ message: 'Attendee name and email are required.' });
         }
 
-        const event = await Event.findById(eventId).select('capacity registrationMode status');
+        const event = await Event.findById(eventId).select(
+            'capacity registrationMode status title date venue'
+        );
         if (!event) {
             return res.status(404).json({ message: 'Event not found.' });
         }
 
-        if (event.status === 'cancelled') {
-            return res.status(400).json({ message: 'Registrations are closed for this event.' });
+        return registerForResolvedEvent(event, attendeeName, attendeeEmail, phone, res);
+    } catch (error) {
+        return res.status(500).json({ message: 'Server error while registering for event.' });
+    }
+}
+
+export async function registerForEventBySlug(req, res) {
+    try {
+        const { slug } = req.params;
+        const { attendeeName, attendeeEmail, phone } = req.body;
+
+        if (!attendeeName || !attendeeEmail) {
+            return res.status(400).json({ message: 'Attendee name and email are required.' });
         }
 
-        if (event.status !== 'published') {
-            return res.status(400).json({ message: 'Registrations are only open for published events.' });
+        const event = await Event.findOne({ slug }).select(
+            'capacity registrationMode status title date venue'
+        );
+        if (!event) {
+            return res.status(404).json({ message: 'Event not found.' });
         }
 
-        const normalizedEmail = attendeeEmail.trim().toLowerCase();
-
-        const existingRegistration = await Registration.findOne({
-            eventId,
-            attendeeEmail: normalizedEmail
-        });
-
-        if (existingRegistration) {
-            return res.status(409).json({ message: 'This attendee is already registered for the event.' });
-        }
-
-        const activeRegistrationCount = await Registration.countDocuments({
-            eventId,
-            status: { $in: countCapacityConsumingStatuses(event.registrationMode) }
-        });
-
-        if (activeRegistrationCount >= event.capacity) {
-            return res.status(400).json({ message: 'Event capacity is full.' });
-        }
-
-        const registration = await Registration.create({
-            eventId,
-            attendeeName: attendeeName.trim(),
-            attendeeEmail: normalizedEmail,
-            phone: phone?.trim() || null,
-            status: event.registrationMode === 'open' ? 'registered' : 'pending'
-        });
-
-        return res.status(201).json({
-            message: event.registrationMode === 'open'
-                ? "You're confirmed!"
-                : 'We received your registration, pending review.',
-            registration
-        });
+        return registerForResolvedEvent(event, attendeeName, attendeeEmail, phone, res);
     } catch (error) {
         return res.status(500).json({ message: 'Server error while registering for event.' });
     }
