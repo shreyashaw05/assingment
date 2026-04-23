@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { buildHeaders, getApiBase, parseResponse } from '../lib/api'
-import type { EventModel, RegistrationMode, RegistrationModel } from '../types'
+import type { EventModel, RegistrationMode, RegistrationModel, RegistrationStatus } from '../types'
 
 type ReviewRegistrationsPageProps = {
   setStatusMessage: (value: string) => void
@@ -12,6 +12,16 @@ type RegistrationRow = RegistrationModel & {
   eventId: string
   eventTitle: string
   eventRegistrationMode: RegistrationMode
+}
+
+function isActionActive(status: RegistrationStatus, action: 'approve' | 'reject' | 'revoke') {
+  if (action === 'approve') {
+    return status === 'approved' || status === 'registered'
+  }
+  if (action === 'reject') {
+    return status === 'rejected'
+  }
+  return status === 'revoked'
 }
 
 export function ReviewRegistrationsPage({ setStatusMessage }: ReviewRegistrationsPageProps) {
@@ -133,24 +143,42 @@ export function ReviewRegistrationsPage({ setStatusMessage }: ReviewRegistration
                   <td>
                     {registration.eventRegistrationMode === 'shortlisted' ? (
                       <div className="row actions">
+                        {(() => {
+                          const approveActive = isActionActive(registration.status, 'approve')
+                          const rejectActive = isActionActive(registration.status, 'reject')
+                          const revokeActive = isActionActive(registration.status, 'revoke')
+                          return (
+                            <>
                         <button
                           type="button"
+                          className={`action-button approve${approveActive ? ' is-active' : ''}`}
+                          aria-pressed={approveActive}
+                          disabled={approveActive}
                           onClick={() => void changeStatus(registration.eventId, registration._id, 'approve')}
                         >
                           Approve
                         </button>
                         <button
                           type="button"
+                          className={`action-button reject${rejectActive ? ' is-active' : ''}`}
+                          aria-pressed={rejectActive}
+                          disabled={rejectActive}
                           onClick={() => void changeStatus(registration.eventId, registration._id, 'reject')}
                         >
                           Reject
                         </button>
                         <button
                           type="button"
+                          className={`action-button revoke${revokeActive ? ' is-active' : ''}`}
+                          aria-pressed={revokeActive}
+                          disabled={revokeActive}
                           onClick={() => void changeStatus(registration.eventId, registration._id, 'revoke')}
                         >
                           Revoke
                         </button>
+                            </>
+                          )
+                        })()}
                       </div>
                     ) : (
                       <span>-</span>

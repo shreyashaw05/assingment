@@ -3,7 +3,7 @@ import { buildHeaders, getApiBase, parseResponse } from '../lib/api'
 
 const links = [
   { to: '/organizer/events/create', label: 'Create Event' },
-  { to: '/organizer/events', label: 'My Events' },
+  { to: '/organizer/events', label: 'My Events', end: true },
   { to: '/organizer/review', label: 'Review RSVP' }
 ]
 
@@ -43,6 +43,7 @@ export function Navbar({ setStatusMessage }: NavbarProps) {
           <NavLink
             key={link.to}
             to={link.to}
+            end={link.end}
             className={({ isActive }) => `tab${isActive ? ' active' : ''}`}
           >
             {link.label}

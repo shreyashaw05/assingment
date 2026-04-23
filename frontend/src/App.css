@@ -86,12 +86,56 @@
 }
 
 .status {
-  margin: 0.9rem 0 0;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-radius: 12px;
-  padding: 0.65rem 0.85rem;
+  margin: 0.3rem 0 0;
+  border: 1px solid #9fb8bf;
+  border-radius: 14px;
+  padding: 0.72rem 0.92rem;
+  background: linear-gradient(135deg, rgba(222, 245, 250, 0.9), rgba(238, 250, 252, 0.95));
+  color: #1a3640;
+  box-shadow: 0 10px 22px -20px rgba(29, 71, 82, 0.9);
   word-break: break-word;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.status-icon {
+  width: 1.22rem;
+  height: 1.22rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  line-height: 1;
+  font-weight: 700;
+  flex-shrink: 0;
+  border: 1px solid currentColor;
+}
+
+.status.success {
+  border-color: #9fb8bf;
+  background: linear-gradient(135deg, rgba(222, 245, 250, 0.9), rgba(238, 250, 252, 0.95));
+  color: #1a3640;
+}
+
+.status.error {
+  border-color: #9fb8bf;
+  background: linear-gradient(135deg, rgba(222, 245, 250, 0.9), rgba(238, 250, 252, 0.95));
+  color: #1a3640;
+}
+
+.status.warning {
+  border-color: #9fb8bf;
+  background: linear-gradient(135deg, rgba(222, 245, 250, 0.9), rgba(238, 250, 252, 0.95));
+  color: #1a3640;
+}
+
+.status.info {
+  border-color: #9fb8bf;
+  background: linear-gradient(135deg, rgba(222, 245, 250, 0.9), rgba(238, 250, 252, 0.95));
+  color: #1a3640;
 }
 
 .grid {
@@ -235,6 +279,46 @@ th {
 .actions button {
   font-size: 0.84rem;
   padding: 0.45rem 0.64rem;
+  border-width: 1px;
+}
+
+.actions .action-button.approve.is-active {
+  background: #2d7c35;
+  border-color: #25632b;
+  color: #f4fff6;
+}
+
+.actions .action-button.reject.is-active {
+  background: #b13c3c;
+  border-color: #8f2f2f;
+  color: #fff5f5;
+}
+
+.actions .action-button.revoke.is-active {
+  background: #a67620;
+  border-color: #865d14;
+  color: #fff8ec;
+}
+
+.actions .action-button.is-active {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18), 0 8px 18px -14px rgba(21, 22, 22, 0.8);
+}
+
+.actions .action-button:not(.is-active) {
+  background: #7b868a;
+  border-color: #626c70;
+  color: #f7fbfc;
+  opacity: 1;
+}
+
+.actions .action-button:not(.is-active):hover {
+  filter: brightness(1.08);
+}
+
+.actions .action-button:disabled {
+  cursor: default;
+  transform: none;
+  filter: none;
 }
 
 @media (max-width: 900px) {
