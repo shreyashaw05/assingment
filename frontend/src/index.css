@@ -1,13 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  --line: #d3d9cf;
-  --text: #1f2729;
-  --canvas: #f2eee3;
-  --canvas-alt: #e8decb;
-  font-family: 'Manrope', 'Segoe UI', sans-serif;
+  --primary: #4f46e5;
+  --primary-dark: #3730a3;
+  --primary-light: #eef2ff;
+  --accent: #06b6d4;
+  --success: #059669;
+  --error: #dc2626;
+  --warning: #d97706;
+  --info: #2563eb;
+  --text: #111827;
+  --text-muted: #6b7280;
+  --border: #e5e7eb;
+  --surface: #ffffff;
+  --surface-alt: #f9fafb;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 16px -2px rgba(0,0,0,0.10), 0 2px 6px -1px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 32px -4px rgba(0,0,0,0.12), 0 4px 10px -2px rgba(0,0,0,0.07);
+  --radius: 14px;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
   font-size: 16px;
-  line-height: 1.45;
+  line-height: 1.5;
   color: var(--text);
 }
 
@@ -17,10 +30,7 @@
 
 body {
   margin: 0;
-  background:
-    radial-gradient(circle at 10% 0%, rgba(247, 166, 0, 0.22), transparent 30%),
-    radial-gradient(circle at 86% 8%, rgba(16, 74, 89, 0.18), transparent 30%),
-    linear-gradient(180deg, var(--canvas), var(--canvas-alt));
+  background: linear-gradient(135deg, #f0f2ff 0%, #f5f3ff 40%, #ecfeff 100%);
   min-height: 100vh;
 }
 
@@ -30,5 +40,7 @@ body {
 
 h1,
 h2 {
-  font-family: 'Fraunces', Georgia, serif;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
