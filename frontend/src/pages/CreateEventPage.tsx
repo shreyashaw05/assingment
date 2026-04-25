@@ -49,62 +49,103 @@ export function CreateEventPage({
   }
 
   return (
-    <section className="card page-card">
-      <h2>Create Event</h2>
-      <form className="stack" onSubmit={createEvent}>
-        <input
-          placeholder="Title"
-          value={form.title}
-          onChange={(event) => setForm((prev) => ({ ...prev, title: event.target.value }))}
-        />
-        <textarea
-          placeholder="Description"
-          value={form.description}
-          onChange={(event) => setForm((prev) => ({ ...prev, description: event.target.value }))}
-        />
-        <input
-          type="datetime-local"
-          value={form.date}
-          onChange={(event) => setForm((prev) => ({ ...prev, date: event.target.value }))}
-        />
-        <input
-          placeholder="Venue"
-          value={form.venue}
-          onChange={(event) => setForm((prev) => ({ ...prev, venue: event.target.value }))}
-        />
-        <input
-          type="number"
-          min={1}
-          placeholder="Capacity"
-          value={form.capacity}
-          onChange={(event) => setForm((prev) => ({ ...prev, capacity: Number(event.target.value) || 0 }))}
-        />
-        <div className="row">
-          <select
-            value={form.registrationMode}
-            onChange={(event) =>
-              setForm((prev) => ({ ...prev, registrationMode: event.target.value as RegistrationMode }))
-            }
-          >
-            <option value="open">Open</option>
-            <option value="shortlisted">Shortlisted</option>
-          </select>
-          <select
-            value={form.status}
-            onChange={(event) => setForm((prev) => ({ ...prev, status: event.target.value as EventStatus }))}
-          >
-            <option value="published">Published</option>
-            <option value="draft">Draft</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
+    <section className="sleek-form-container">
+      <div className="form-header">
+        <h2>Create Event</h2>
+        <p className="subtitle">Fill out the details below to launch a new event.</p>
+      </div>
+      
+      <form className="sleek-form stack" onSubmit={createEvent}>
+        <div className="form-group">
+          <input
+            placeholder="Event Title"
+            value={form.title}
+            className="sleek-input"
+            onChange={(event) => setForm((prev) => ({ ...prev, title: event.target.value }))}
+            required
+          />
         </div>
-        <button type="submit">Create event</button>
+        
+        <div className="form-group">
+          <textarea
+            placeholder="Event Description"
+            value={form.description}
+            className="sleek-input"
+            onChange={(event) => setForm((prev) => ({ ...prev, description: event.target.value }))}
+            required
+          />
+        </div>
+
+        <div className="form-row">
+          <div className="form-group half-width">
+            <input
+              type="datetime-local"
+              value={form.date}
+              className="sleek-input"
+              onChange={(event) => setForm((prev) => ({ ...prev, date: event.target.value }))}
+              required
+            />
+          </div>
+          <div className="form-group half-width">
+            <input
+              placeholder="Venue"
+              value={form.venue}
+              className="sleek-input"
+              onChange={(event) => setForm((prev) => ({ ...prev, venue: event.target.value }))}
+              required
+            />
+          </div>
+        </div>
+
+        <div className="form-row">
+          <div className="form-group third-width">
+            <input
+              type="number"
+              min={1}
+              placeholder="Capacity"
+              value={form.capacity || ''}
+              className="sleek-input"
+              onChange={(event) => setForm((prev) => ({ ...prev, capacity: Number(event.target.value) || 0 }))}
+              required
+            />
+          </div>
+          <div className="form-group third-width">
+            <select
+              value={form.registrationMode}
+              className="sleek-input"
+              onChange={(event) =>
+                setForm((prev) => ({ ...prev, registrationMode: event.target.value as RegistrationMode }))
+              }
+            >
+              <option value="open">Open</option>
+              <option value="shortlisted">Shortlisted</option>
+            </select>
+          </div>
+          <div className="form-group third-width">
+            <select
+              value={form.status}
+              className="sleek-input"
+              onChange={(event) => setForm((prev) => ({ ...prev, status: event.target.value as EventStatus }))}
+            >
+              <option value="published">Published</option>
+              <option value="draft">Draft</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" className="btn-solid form-submit-btn">
+          Create Event
+        </button>
       </form>
 
       {createdEvent ? (
-        <div className="summary">
+        <div className="stark-summary">
           <p>
-            <strong>Event created.</strong>
+            <strong>✓ Event created successfully.</strong>
+          </p>
+          <p className="summary-details">
+            {createdEvent.title} is now available in your events list.
           </p>
         </div>
       ) : null}

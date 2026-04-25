@@ -1,10 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;700&display=swap');
 
 :root {
-  --line: #d3d9cf;
-  --text: #1f2729;
-  --canvas: #f2eee3;
-  --canvas-alt: #e8decb;
+  --line: #e0e0e0;
+  --text: #000000;
+  --canvas: #ffffff;
+  --canvas-alt: #f5f5f5;
   font-family: 'Manrope', 'Segoe UI', sans-serif;
   font-size: 16px;
   line-height: 1.45;
@@ -17,15 +17,170 @@
 
 body {
   margin: 0;
-  background:
-    radial-gradient(circle at 10% 0%, rgba(247, 166, 0, 0.22), transparent 30%),
-    radial-gradient(circle at 86% 8%, rgba(16, 74, 89, 0.18), transparent 30%),
-    linear-gradient(180deg, var(--canvas), var(--canvas-alt));
+  background: linear-gradient(180deg, var(--canvas), var(--canvas-alt));
   min-height: 100vh;
 }
 
 #root {
   min-height: 100vh;
+}
+/* Sleek Form Container - Now with structural borders */
+.sleek-form-container {
+  max-width: 800px;
+  margin: 3rem auto;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  background: #ffffff;
+  border: 3px solid #000000;
+  box-shadow: 8px 8px 0px #000000; /* Solid offset shadow for depth */
+}
+
+.form-header h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+}
+
+.form-header .subtitle {
+  margin: 0;
+  color: #444444;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Form Layout */
+.sleek-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.half-width {
+  flex: 1 1 50%;
+}
+
+.third-width {
+  flex: 1 1 33.33%;
+}
+
+/* High Contrast Bordered Inputs */
+.sleek-input {
+  width: 100%;
+  border: 2px solid #000000;
+  border-radius: 0; 
+  background: #ffffff;
+  color: #000000;
+  padding: 0.85rem 1rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.sleek-input::placeholder {
+  color: #777777;
+}
+
+.sleek-input:focus {
+  outline: none;
+  background-color: #fafafa;
+  box-shadow: 4px 4px 0px #000000;
+  transform: translate(-2px, -2px);
+}
+
+textarea.sleek-input {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Select specifics */
+select.sleek-input {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23000000%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem top 50%;
+  background-size: 0.65rem auto;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+/* Bold Submit Button */
+.form-submit-btn {
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 1rem;
+  align-self: flex-start;
+  background: #000000;
+  color: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.form-submit-btn:hover {
+  background: #ffffff;
+  color: #000000;
+  box-shadow: 4px 4px 0px #000000;
+  transform: translate(-2px, -2px);
+}
+
+/* Stark B&W Success Summary */
+.stark-summary {
+  border: 2px solid #000000;
+  background: #ffffff;
+  color: #000000;
+  padding: 1.25rem 1.5rem;
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  box-shadow: 4px 4px 0px #000000;
+}
+
+.stark-summary p {
+  margin: 0;
+}
+
+.stark-summary .summary-details {
+  color: #444444;
+  font-size: 0.9rem;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .sleek-form-container {
+    padding: 1.5rem;
+    margin: 1.5rem;
+    box-shadow: 4px 4px 0px #000000;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .form-submit-btn {
+    width: 100%;
+  }
 }
 
 h1,

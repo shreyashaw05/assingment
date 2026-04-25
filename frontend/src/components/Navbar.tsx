@@ -75,35 +75,47 @@ export function Navbar({ setStatusMessage }: NavbarProps) {
   }
 
   return (
-    <header className="topbar">
-      <div>
-        <p className="eyebrow">Event RSVP Platform</p>
-        <h1>Organizer Console</h1>
-      </div>
-      <div className="topbar-calendar">
-        {!isCalendarConnected&& <button type="button" onClick={() => void handleConnectCalendar()}>
-          Connect Google Calendar
-        </button>}
-        <p className="eyebrow">
-          Calendar: {isCalendarConnected ? 'Connected' : 'Not connected'}
-        </p>
+    <header className="sleek-navbar">
+      <div className="navbar-brand">
+        <span className="navbar-title">Organizer Console</span>
       </div>
 
-      <nav className="tabs" aria-label="Primary">
+      <nav className="navbar-links" aria-label="Primary">
         {links.map((link) => (
           <NavLink
             key={link.to}
             to={link.to}
             end={link.end}
-            className={({ isActive }) => `tab${isActive ? ' active' : ''}`}
+            className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}
           >
             {link.label}
           </NavLink>
         ))}
-        <button type="button" className="tab tab-button" onClick={() => void logoutOrganizer()}>
+      </nav>
+
+      <div className="navbar-actions">
+        <div className="calendar-status">
+          {isCalendarConnected === false && (
+            <button 
+              type="button" 
+              className="btn-outline" 
+              onClick={() => void handleConnectCalendar()}
+            >
+              Connect Calendar
+            </button>
+          )}
+          {isCalendarConnected === true && (
+            <span className="status-badge connected">Calendar Connected</span>
+          )}
+        </div>
+        <button 
+          type="button" 
+          className="btn-solid" 
+          onClick={() => void logoutOrganizer()}
+        >
           Logout
         </button>
-      </nav>
+      </div>
     </header>
   )
 }

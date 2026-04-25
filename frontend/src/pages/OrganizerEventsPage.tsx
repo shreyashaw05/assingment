@@ -54,16 +54,16 @@ export function OrganizerEventsPage({ setStatusMessage }: OrganizerEventsPagePro
   }
 
   return (
-    <section className="card page-card wide">
-      <h2>My Events</h2>
-      <div className="row">
-        <button type="button" onClick={() => void loadEvents()}>
+    <section className="full-width-section">
+      <div className="section-header">
+        <h2>My Events</h2>
+        <button type="button" className="btn-outline" onClick={() => void loadEvents()}>
           {loading ? 'Loading...' : 'Refresh'}
         </button>
       </div>
 
       <div className="table-wrap">
-        <table>
+        <table className="simple-black-table">
           <thead>
             <tr>
               <th>Title</th>
@@ -78,12 +78,12 @@ export function OrganizerEventsPage({ setStatusMessage }: OrganizerEventsPagePro
           <tbody>
             {events.length === 0 ? (
               <tr>
-                <td colSpan={7}>No events loaded.</td>
+                <td colSpan={7} className="empty-state">No events loaded.</td>
               </tr>
             ) : (
               events.map((event) => (
                 <tr key={event._id}>
-                  <td>{event.title}</td>
+                  <td><strong>{event.title}</strong></td>
                   <td>{event.status}</td>
                   <td title={event.calendarSyncError || ''}>
                     {event.calendarSyncStatus || 'not_synced'}
@@ -92,13 +92,14 @@ export function OrganizerEventsPage({ setStatusMessage }: OrganizerEventsPagePro
                   <td>{event.registrationMode}</td>
                   <td>{event.capacity}</td>
                   <td>
-                    <a href={`/events/${event.slug}`} target="_blank" rel="noreferrer">
+                    <a href={`/events/${event.slug}`} target="_blank" rel="noreferrer" className="table-link">
                       {`${window.location.origin}/events/${event.slug}`}
                     </a>
                   </td>
                   <td>
                     <button
                       type="button"
+                      className="btn-solid table-btn"
                       onClick={() => void syncEventToGoogleCalendar(event._id)}
                       disabled={syncingEventId === event._id || event.status !== 'published'}
                       title={event.status !== 'published' ? 'Only published events can be synced.' : undefined}
