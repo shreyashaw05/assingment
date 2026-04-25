@@ -6,7 +6,7 @@ import { connectToDatabase } from './lib/db-connect.js';
 import authRoutes from './routes/auth-routes.js';
 import eventRoutes from './routes/event-routes.js';
 import organizationRoutes from './routes/organization-routes.js';
-
+import calendarRoutes from './routes/calendar-routes.js';
 
 dotenv.config();
 
@@ -22,6 +22,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/organisations', organizationRoutes);
 app.use('/api/events', eventRoutes);
+app.use('/api/calendar', calendarRoutes);
 
 async function startServer() {
     try {

@@ -12,7 +12,8 @@ const eventSchema = new mongoose.Schema({
     status: { type: String, enum: ['draft', 'published', 'cancelled'], default: 'draft' },
     organizerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Organizer' },
     googleCalendarEventId: { type: String, default: null },
-    calendarSyncStatus: { type: String, enum: ['synced', 'failed', 'pending', 'not_synced'], default: 'not_synced' }
+    calendarSyncStatus: { type: String, enum: ['synced', 'failed', 'pending', 'not_synced'], default: 'not_synced' },
+    calendarSyncError: { type: String, default: null }
 }, { timestamps: true });
 
 export default mongoose.model('Event', eventSchema);

@@ -12,6 +12,9 @@ export type EventModel = {
   registrationMode: RegistrationMode
   status: EventStatus
   capacity: number
+  googleCalendarEventId?: string | null
+  calendarSyncStatus?: 'synced' | 'failed' | 'pending' | 'not_synced'
+  calendarSyncError?: string | null
 }
 
 export type RegistrationModel = {

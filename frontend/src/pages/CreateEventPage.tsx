@@ -15,7 +15,7 @@ export function CreateEventPage({
   createdEvent,
   setCreatedEvent
 }: CreateEventPageProps) {
-  const [form, setForm] = useState({
+  const initialFormState = {
     title: '',
     description: '',
     date: '',
@@ -24,6 +24,10 @@ export function CreateEventPage({
     capacity: 50,
     registrationMode: 'open' as RegistrationMode,
     status: 'published' as EventStatus
+  }
+
+  const [form, setForm] = useState({
+    ...initialFormState
   })
 
   async function createEvent(event: React.FormEvent) {
@@ -37,7 +41,8 @@ export function CreateEventPage({
       })
       const data = await parseResponse<{ event: EventModel }>(response)
       setCreatedEvent(data.event)
-      setStatusMessage(`Event created with slug: ${data.event.slug}`)
+      setForm({ ...initialFormState })
+      setStatusMessage('Event created successfully.')
     } catch (error) {
       setStatusMessage(error instanceof Error ? error.message : 'Event creation failed.')
     }
@@ -99,13 +104,7 @@ export function CreateEventPage({
       {createdEvent ? (
         <div className="summary">
           <p>
-            <strong>Event id:</strong> {createdEvent._id}
-          </p>
-          <p>
-            <strong>Slug:</strong> {createdEvent.slug}
-          </p>
-          <p>
-            <strong>Share URL:</strong> {`${window.location.origin}/events/${createdEvent.slug}`}
+            <strong>Event created.</strong>
           </p>
         </div>
       ) : null}
